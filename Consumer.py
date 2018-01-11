@@ -1,16 +1,32 @@
-import numpy as np
+# -*- coding: utf-8 -*-
 
+"""
+Issues:
+    - hard coded cdf functions
+    - max between two random variable is hardcoded too
+Possible fixes:
+    - tweak sympy
+"""
+
+
+import numpy as np
+import sympy as sp
+import Distribution
+
+
+x, y, z = sp.symbols('x y z')  # Add / Delete symbols if needed
+    
 
 class Consumer:
     """
-    Represents consumer behavior who search and switch.
+    Represents a consumer who search and switch.
     Attributes:
         id
         search costs : when she decides to visit a new shop she has never seen
         switch costs : when she decides to leave her curent shop
         valuations : set of valuation of every product in every shop
         time on the market ???
-    Methods:
+    Methods: maximal_valuation, get_favorite, decision
 
     Ideas : Share of info by overwriting __add__ (+) [for waaaaaaaaaaaay later]
             Incomplete memory by overwriting __sub__ (-)
@@ -21,7 +37,7 @@ class Consumer:
                  type_search='onebyone',
                  search_costs=0,
                  switch_costs=0,
-                 distributions="uniform",
+                 distributions=Distribution.Uniform(0, 1),
                  valuations=np.array([])):
         """
         Assumptions:
@@ -63,8 +79,9 @@ class Consumer:
     
     def get_favorite(self):
         """
-        Returns : The shop from which the consumer enjoys the maximal valuation
-        Input : Valuations (and seller's id?) 
+        Gets the best valuation a consumer knows
+        Input : valuations (and seller's id?) 
+        Output: a valuation
         
         Expected difficulty : If we introduce collections, 
                                 there would be another hierarchy to deal with
@@ -77,7 +94,7 @@ class Consumer:
     
     def decision(self, unknown_products):
         """
-        Returns : the shop(s) the consumer will visit
+        Get the shop(s) the consumer will visit
             Have a think regarding search / consumer search
         Input : array of numbers of unknown products in each shop
                 array of search costs
